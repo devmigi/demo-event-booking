@@ -1,0 +1,31 @@
+body, h1.page-header{
+    font-weight: 200!important;
+}
+th{
+    font-weight: 400!important;
+}
+
+.navbar-brand{
+    color: #888;
+    font-weight: 500;
+}
+
+.page-header{
+    margin: 15px 0;
+
+}
+
+#piechart{
+    display: inline-block;
+}
+
+.table-dark td, .table-dark th, .table-dark thead th{
+    border-color: #fff;
+    background-color: #f2f2f2;
+    color: #000;
+}
+
+.form-control.file{
+    padding-left: 0;
+    border: none;
+}
