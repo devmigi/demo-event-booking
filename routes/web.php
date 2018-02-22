@@ -17,7 +17,9 @@ Route::get('/logout', function () {
     return redirect('/');
 });
 
-Route::get('/', 'HomeController@index')->name('index');
+Route::get('/', 'HomeController@coupondunia');
+Route::post('/', 'HomeController@couponduniaCalculate');
+
 Route::get('event/{id}', 'HomeController@register')->name('home');
 Route::post('event/{id}', 'HomeController@save');
 

@@ -27,6 +27,91 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function coupondunia()
+    {
+        return view('coupondunia', ['totalHike' => null]);
+
+    }
+
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function couponduniaCalculate(Request $request)
+    {
+        request()->validate([
+            'file' => 'required',
+        ]);
+
+        // get file from input
+        $file = $request->file('file');
+
+        // store each line into array
+        $ratings = file($file, FILE_IGNORE_NEW_LINES);
+
+        if(!$ratings){
+            return "Invalid Input!";
+        }
+
+
+//        $ratings = [ 2, 4, 2, 6, 1, 7, 8, 9, 2, 1 ];
+//        $ratings = [ 1,2,2];
+
+        $totalHike =  $this->hikeCalculator($ratings);
+
+
+        return view('coupondunia', ['totalHike' => $totalHike]);
+    }
+
+
+    public function hikeCalculator($ratings) {
+        // if there's only one employee
+        if (count($ratings)==1) {
+            return 1;
+        }
+
+        // calculate height from start to end
+        $hikes = $this->hikeFromStart($ratings);
+
+        // calculate hike from end to start
+        $hikes = $this->hikeFromEnd($ratings, $hikes);
+
+        return array_sum($hikes);
+    }
+
+    public function hikeFromStart($ratings) {
+        $hikes = [];
+        $hikes[0] = 1;
+
+        for ($i = 1; $i < count($ratings); $i++) {
+            if ($ratings[$i] > $ratings[$i - 1]) {
+                $hikes[$i] = $hikes[$i - 1] + 1;
+            } else {
+                $hikes[$i] = 1;
+            }
+        }
+        return $hikes;
+    }
+
+    public function hikeFromEnd($ratings, $hikes) {
+        for ($i = count($ratings) - 2; $i >= 0; $i--) {
+            if ($ratings[$i] > $ratings[$i + 1]) {
+                $hikes[$i] = max($hikes[$i], $hikes[$i + 1] + 1);
+            }
+        }
+
+        return $hikes;
+    }
+
+
+
+        /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $events = Event::where('active', true)->get();
